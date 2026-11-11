@@ -7,6 +7,7 @@
 [ext_resource type="PackedScene" path="res://scenes/ui/virtual_controls.tscn" id="5_controls"]
 [ext_resource type="PackedScene" path="res://scenes/ui/dialog_box.tscn" id="6_dialog"]
 [ext_resource type="Texture2D" path="res://assets/sprites/tileset_ruins.png" id="7_tiles"]
+[ext_resource type="PackedScene" path="res://scenes/objects/portal.tscn" id="8_portal"]
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_top"]
 normal = Vector2(0, 1)
@@ -62,3 +63,7 @@ position = Vector2(140, 70)
 [node name="VirtualControls" parent="." instance=ExtResource("5_controls")]
 
 [node name="DialogBox" parent="." instance=ExtResource("6_dialog")]
+
+[node name="Portal" parent="." instance=ExtResource("8_portal")]
+position = Vector2(300, 0)
+

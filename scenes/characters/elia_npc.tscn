@@ -1,0 +1,60 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://scripts/elia_npc.gd" id="1_elia"]
+[ext_resource type="Texture2D" path="res://assets/sprites/elia_sprite.png" id="2_sprite"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_col"]
+radius = 8.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_interact"]
+radius = 28.0
+
+[node name="EliaNPC" type="CharacterBody2D"]
+collision_layer = 0
+collision_mask = 1
+script = ExtResource("1_elia")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, 4)
+shape = SubResource("CircleShape2D_col")
+
+[node name="Visual" type="Node2D" parent="."]
+
+[node name="Sprite2D" type="Sprite2D" parent="Visual"]
+texture_filter = 0
+position = Vector2(0, -2)
+texture = ExtResource("2_sprite")
+
+[node name="Chains" type="Node2D" parent="Visual"]
+
+[node name="Chain1" type="Polygon2D" parent="Visual/Chains"]
+color = Color(0.6, 0.2, 0.7, 0.8)
+polygon = PackedVector2Array(-10, -6, 10, 8, 8, 10, -12, -4)
+
+[node name="Chain2" type="Polygon2D" parent="Visual/Chains"]
+color = Color(0.6, 0.2, 0.7, 0.8)
+polygon = PackedVector2Array(10, -6, -10, 8, -8, 10, 12, -4)
+
+[node name="InteractArea" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="InteractArea"]
+shape = SubResource("CircleShape2D_interact")
+
+[node name="PromptLabel" type="Label" parent="."]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -40.0
+offset_top = -34.0
+offset_right = 40.0
+offset_bottom = -18.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_colors/font_color = Color(1, 0.9, 0.3, 1)
+theme_override_font_sizes/font_size = 10
+text = "[ 구출하기 ]"
+horizontal_alignment = 1

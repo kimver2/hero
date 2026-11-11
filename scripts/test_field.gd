@@ -4,6 +4,7 @@ extends Node2D
 @onready var player = $Player
 @onready var hud = $HUD
 @onready var dialog_box = $DialogBox
+@onready var portal = $Portal
 
 var quest_title: String = "유적의 사교도 토벌"
 var quest_target_count: int = 2
@@ -15,12 +16,14 @@ func _ready() -> void:
 		player.health_changed.connect(hud.update_hp)
 		player.mana_changed.connect(hud.update_sp)
 	
+	if portal:
+		portal.set_active(false)
+	
 	if dialog_box:
 		dialog_box.dialog_finished.connect(_on_dialog_finished)
 		await get_tree().create_timer(0.3).timeout
 		_play_opening_scene()
 	
-	# 사교도 적들의 처치 시그널 연결
 	_connect_enemies()
 
 func _connect_enemies() -> void:
@@ -60,6 +63,11 @@ func _on_dialog_finished() -> void:
 	if not is_first_dialog_done:
 		is_first_dialog_done = true
 		hud.update_quest(quest_title, quest_current_count, quest_target_count)
+	elif quest_current_count >= quest_target_count:
+		# 2차 컷신 종료 후 포탈 활성화 및 퀘스트 갱신
+		if portal:
+			portal.set_active(true)
+		hud.update_quest("우측 포탈로 제단 진입", 0, 1)
 
 func _on_enemy_defeated() -> void:
 	quest_current_count += 1

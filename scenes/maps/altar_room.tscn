@@ -1,0 +1,79 @@
+[gd_scene load_steps=12 format=3]
+
+[ext_resource type="Script" path="res://scripts/altar_room.gd" id="1_altar"]
+[ext_resource type="Texture2D" path="res://assets/sprites/tileset_ruins.png" id="2_tiles"]
+[ext_resource type="PackedScene" path="res://scenes/characters/player.tscn" id="3_player"]
+[ext_resource type="PackedScene" path="res://scenes/characters/boss_priest.tscn" id="4_boss"]
+[ext_resource type="PackedScene" path="res://scenes/characters/elia_npc.tscn" id="5_elia"]
+[ext_resource type="PackedScene" path="res://scenes/ui/hud.tscn" id="6_hud"]
+[ext_resource type="PackedScene" path="res://scenes/ui/boss_hp_bar.tscn" id="7_bosshp"]
+[ext_resource type="PackedScene" path="res://scenes/ui/virtual_controls.tscn" id="8_controls"]
+[ext_resource type="PackedScene" path="res://scenes/ui/dialog_box.tscn" id="9_dialog"]
+[ext_resource type="PackedScene" path="res://scenes/objects/portal.tscn" id="10_portal"]
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_top"]
+normal = Vector2(0, 1)
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_bottom"]
+
+[node name="AltarRoom" type="Node2D"]
+script = ExtResource("1_altar")
+
+[node name="BackgroundFloor" type="TextureRect" parent="."]
+modulate = Color(0.65, 0.45, 0.55, 1)
+texture_filter = 0
+offset_left = -500.0
+offset_top = -300.0
+offset_right = 500.0
+offset_bottom = 300.0
+texture = ExtResource("2_tiles")
+stretch_mode = 1
+
+[node name="AltarPlatform" type="Polygon2D" parent="."]
+color = Color(0.35, 0.15, 0.25, 1)
+polygon = PackedVector2Array(80, -70, 220, -70, 240, 70, 60, 70)
+
+[node name="RuneCore" type="Sprite2D" parent="AltarPlatform"]
+modulate = Color(1, 0.3, 0.4, 1)
+texture_filter = 0
+position = Vector2(150, 0)
+scale = Vector2(2.5, 2.5)
+texture = ExtResource("2_tiles")
+region_enabled = true
+region_rect = Rect2(0, 32, 32, 32)
+
+[node name="Boundaries" type="StaticBody2D" parent="."]
+collision_mask = 0
+
+[node name="Top" type="CollisionShape2D" parent="Boundaries"]
+position = Vector2(0, -250)
+shape = SubResource("WorldBoundaryShape2D_top")
+
+[node name="Bottom" type="CollisionShape2D" parent="Boundaries"]
+position = Vector2(0, 250)
+shape = SubResource("WorldBoundaryShape2D_bottom")
+
+[node name="Player" parent="." instance=ExtResource("3_player")]
+position = Vector2(-220, 0)
+
+[node name="Camera2D" type="Camera2D" parent="Player"]
+position_smoothing_enabled = true
+position_smoothing_speed = 8.0
+
+[node name="EliaNPC" parent="." instance=ExtResource("5_elia")]
+position = Vector2(150, 0)
+
+[node name="BossPriest" parent="." instance=ExtResource("4_boss")]
+position = Vector2(20, 0)
+
+[node name="ExitPortal" parent="." instance=ExtResource("10_portal")]
+position = Vector2(280, 0)
+target_scene_path = "res://scenes/maps/test_field.tscn"
+
+[node name="HUD" parent="." instance=ExtResource("6_hud")]
+
+[node name="BossHPBar" parent="HUD" instance=ExtResource("7_bosshp")]
+
+[node name="VirtualControls" parent="." instance=ExtResource("8_controls")]
+
+[node name="DialogBox" parent="." instance=ExtResource("9_dialog")]
