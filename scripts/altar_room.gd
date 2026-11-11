@@ -16,12 +16,14 @@ func _ready() -> void:
 	if player and hud:
 		player.health_changed.connect(hud.update_hp)
 		player.mana_changed.connect(hud.update_sp)
+		player.potion_changed.connect(hud.update_potions)
 	
 	if boss:
 		boss.health_changed.connect(_on_boss_health_changed)
 		boss.defeated.connect(_on_boss_defeated)
 	
 	if exit_portal:
+		exit_portal.target_scene_path = "res://scenes/maps/village_ruins.tscn"
 		exit_portal.set_active(false)
 	
 	hud.update_quest("사교도 사제 처치 및 엘리아 구출", 0, 1)

@@ -1,0 +1,82 @@
+[gd_scene load_steps=13 format=3]
+
+[ext_resource type="Script" path="res://scripts/forest_sanctuary.gd" id="1_sanctuary"]
+[ext_resource type="Texture2D" path="res://assets/sprites/tileset_forest.png" id="2_tiles"]
+[ext_resource type="PackedScene" path="res://scenes/characters/player.tscn" id="3_player"]
+[ext_resource type="PackedScene" path="res://scenes/characters/boss_guardian.tscn" id="4_boss"]
+[ext_resource type="PackedScene" path="res://scenes/characters/elia_npc.tscn" id="5_elia"]
+[ext_resource type="PackedScene" path="res://scenes/characters/karad_npc.tscn" id="6_karad"]
+[ext_resource type="PackedScene" path="res://scenes/ui/hud.tscn" id="7_hud"]
+[ext_resource type="PackedScene" path="res://scenes/ui/boss_hp_bar.tscn" id="8_bosshp"]
+[ext_resource type="PackedScene" path="res://scenes/ui/virtual_controls.tscn" id="9_controls"]
+[ext_resource type="PackedScene" path="res://scenes/ui/dialog_box.tscn" id="10_dialog"]
+[ext_resource type="PackedScene" path="res://scenes/objects/portal.tscn" id="11_portal"]
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_top"]
+normal = Vector2(0, 1)
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_bottom"]
+
+[node name="ForestSanctuary" type="Node2D"]
+script = ExtResource("1_sanctuary")
+
+[node name="BackgroundFloor" type="TextureRect" parent="."]
+modulate = Color(0.5, 0.7, 0.5, 1)
+texture_filter = 0
+offset_left = -600.0
+offset_top = -360.0
+offset_right = 600.0
+offset_bottom = 360.0
+texture = ExtResource("2_tiles")
+stretch_mode = 1
+
+[node name="SacredRuneCircle" type="Polygon2D" parent="."]
+color = Color(0.2, 0.45, 0.35, 0.7)
+polygon = PackedVector2Array(-80, 0, -56, -56, 0, -80, 56, -56, 80, 0, 56, 56, 0, 80, -56, 56)
+
+[node name="AncientPillarLeft" type="Polygon2D" parent="."]
+color = Color(0.18, 0.3, 0.22, 1)
+polygon = PackedVector2Array(-140, -120, -100, -120, -90, -40, -150, -40)
+
+[node name="AncientPillarRight" type="Polygon2D" parent="."]
+color = Color(0.18, 0.3, 0.22, 1)
+polygon = PackedVector2Array(100, 40, 140, 40, 150, 120, 90, 120)
+
+[node name="Boundaries" type="StaticBody2D" parent="."]
+collision_mask = 0
+
+[node name="Top" type="CollisionShape2D" parent="Boundaries"]
+position = Vector2(0, -280)
+shape = SubResource("WorldBoundaryShape2D_top")
+
+[node name="Bottom" type="CollisionShape2D" parent="Boundaries"]
+position = Vector2(0, 280)
+shape = SubResource("WorldBoundaryShape2D_bottom")
+
+[node name="Player" parent="." instance=ExtResource("3_player")]
+position = Vector2(-220, 0)
+
+[node name="Camera2D" type="Camera2D" parent="Player"]
+position_smoothing_enabled = true
+position_smoothing_speed = 8.0
+
+[node name="EliaNPC" parent="." instance=ExtResource("5_elia")]
+position = Vector2(-255, -20)
+
+[node name="KaradNPC" parent="." instance=ExtResource("6_karad")]
+position = Vector2(-260, 20)
+
+[node name="BossGuardian" parent="." instance=ExtResource("4_boss")]
+position = Vector2(80, 0)
+
+[node name="ExitPortal" parent="." instance=ExtResource("11_portal")]
+position = Vector2(280, 0)
+target_scene_path = "res://scenes/maps/test_field.tscn"
+
+[node name="HUD" parent="." instance=ExtResource("7_hud")]
+
+[node name="BossHPBar" parent="HUD" instance=ExtResource("8_bosshp")]
+
+[node name="VirtualControls" parent="." instance=ExtResource("9_controls")]
+
+[node name="DialogBox" parent="." instance=ExtResource("10_dialog")]

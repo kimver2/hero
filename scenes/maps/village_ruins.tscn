@@ -1,0 +1,86 @@
+[gd_scene load_steps=11 format=3]
+
+[ext_resource type="Script" path="res://scripts/village_ruins.gd" id="1_ruins"]
+[ext_resource type="Texture2D" path="res://assets/sprites/tileset_ruins.png" id="2_tiles"]
+[ext_resource type="PackedScene" path="res://scenes/characters/player.tscn" id="3_player"]
+[ext_resource type="PackedScene" path="res://scenes/characters/elia_npc.tscn" id="4_elia"]
+[ext_resource type="PackedScene" path="res://scenes/characters/karad_npc.tscn" id="5_karad"]
+[ext_resource type="PackedScene" path="res://scenes/characters/cultist_knight.tscn" id="6_knight"]
+[ext_resource type="PackedScene" path="res://scenes/objects/portal.tscn" id="7_portal"]
+[ext_resource type="PackedScene" path="res://scenes/ui/hud.tscn" id="8_hud"]
+[ext_resource type="PackedScene" path="res://scenes/ui/virtual_controls.tscn" id="9_controls"]
+[ext_resource type="PackedScene" path="res://scenes/ui/dialog_box.tscn" id="10_dialog"]
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_top"]
+normal = Vector2(0, 1)
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_bottom"]
+
+[node name="VillageRuins" type="Node2D"]
+script = ExtResource("1_ruins")
+
+[node name="BackgroundFloor" type="TextureRect" parent="."]
+modulate = Color(0.85, 0.55, 0.45, 1)
+texture_filter = 0
+offset_left = -600.0
+offset_top = -400.0
+offset_right = 600.0
+offset_bottom = 400.0
+texture = ExtResource("2_tiles")
+stretch_mode = 1
+
+[node name="BurningRubble1" type="Polygon2D" parent="."]
+color = Color(0.3, 0.15, 0.1, 1)
+polygon = PackedVector2Array(-80, -120, -20, -130, 0, -80, -70, -70)
+
+[node name="FireGlow1" type="Polygon2D" parent="BurningRubble1"]
+color = Color(1, 0.4, 0.1, 0.6)
+polygon = PackedVector2Array(-60, -110, -30, -120, -15, -85, -55, -80)
+
+[node name="BurningRubble2" type="Polygon2D" parent="."]
+color = Color(0.3, 0.15, 0.1, 1)
+polygon = PackedVector2Array(60, 80, 130, 70, 150, 120, 70, 130)
+
+[node name="FireGlow2" type="Polygon2D" parent="BurningRubble2"]
+color = Color(1, 0.4, 0.1, 0.6)
+polygon = PackedVector2Array(80, 90, 120, 85, 135, 115, 85, 120)
+
+[node name="Boundaries" type="StaticBody2D" parent="."]
+collision_mask = 0
+
+[node name="Top" type="CollisionShape2D" parent="Boundaries"]
+position = Vector2(0, -320)
+shape = SubResource("WorldBoundaryShape2D_top")
+
+[node name="Bottom" type="CollisionShape2D" parent="Boundaries"]
+position = Vector2(0, 320)
+shape = SubResource("WorldBoundaryShape2D_bottom")
+
+[node name="Player" parent="." instance=ExtResource("3_player")]
+position = Vector2(-200, 0)
+
+[node name="Camera2D" type="Camera2D" parent="Player"]
+position_smoothing_enabled = true
+position_smoothing_speed = 8.0
+
+[node name="EliaNPC" parent="." instance=ExtResource("4_elia")]
+position = Vector2(-235, 0)
+
+[node name="KaradNPC" parent="." instance=ExtResource("5_karad")]
+position = Vector2(0, -80)
+
+[node name="Knight1" parent="." groups=["knights"] instance=ExtResource("6_knight")]
+position = Vector2(80, -40)
+
+[node name="Knight2" parent="." groups=["knights"] instance=ExtResource("6_knight")]
+position = Vector2(140, 60)
+
+[node name="ExitPortal" parent="." instance=ExtResource("7_portal")]
+position = Vector2(320, 0)
+target_scene_path = "res://scenes/maps/forest_sanctuary.tscn"
+
+[node name="HUD" parent="." instance=ExtResource("8_hud")]
+
+[node name="VirtualControls" parent="." instance=ExtResource("9_controls")]
+
+[node name="DialogBox" parent="." instance=ExtResource("10_dialog")]

@@ -1,0 +1,23 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://scripts/karad_npc.gd" id="1_karad"]
+[ext_resource type="Texture2D" path="res://assets/sprites/karad_sprite.png" id="2_sprite"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_col"]
+radius = 10.0
+
+[node name="KaradNPC" type="CharacterBody2D"]
+collision_layer = 0
+collision_mask = 1
+script = ExtResource("1_karad")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, 4)
+shape = SubResource("CircleShape2D_col")
+
+[node name="Visual" type="Node2D" parent="."]
+
+[node name="Sprite2D" type="Sprite2D" parent="Visual"]
+texture_filter = 0
+position = Vector2(0, -2)
+texture = ExtResource("2_sprite")

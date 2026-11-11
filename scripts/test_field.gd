@@ -15,6 +15,7 @@ func _ready() -> void:
 	if player and hud:
 		player.health_changed.connect(hud.update_hp)
 		player.mana_changed.connect(hud.update_sp)
+		player.potion_changed.connect(hud.update_potions)
 	
 	if portal:
 		portal.set_active(false)

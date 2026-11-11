@@ -3,6 +3,7 @@ extends CharacterBody2D
 
 signal health_changed(current: int, max_val: int)
 signal mana_changed(current: int, max_val: int)
+signal potion_changed(count: int)
 
 enum State { IDLE, MOVE, ATTACK, DASH }
 
@@ -13,6 +14,7 @@ enum State { IDLE, MOVE, ATTACK, DASH }
 
 @export var max_hp: int = 100
 @export var max_sp: int = 50
+@export var potion_count: int = 3
 
 var current_hp: int = 100
 var current_sp: int = 50
@@ -47,6 +49,7 @@ func _ready() -> void:
 	hitbox_area.area_entered.connect(_on_hitbox_area_entered)
 	emit_signal("health_changed", current_hp, max_hp)
 	emit_signal("mana_changed", current_sp, max_sp)
+	emit_signal("potion_changed", potion_count)
 
 # 피격 및 무적 관련
 var is_invincible: bool = false
@@ -126,6 +129,53 @@ func _handle_action_inputs() -> void:
 		_perform_attack()
 	elif Input.is_action_just_pressed("skill_1") and current_sp >= 15:
 		_perform_skill_1()
+	elif Input.is_action_just_pressed("skill_2") and current_sp >= 25:
+		_perform_skill_2()
+	elif Input.is_action_just_pressed("use_potion"):
+		use_health_potion()
+
+func use_health_potion() -> void:
+	if potion_count > 0 and current_hp < max_hp:
+		potion_count -= 1
+		current_hp = min(max_hp, current_hp + 45)
+		emit_signal("health_changed", current_hp, max_hp)
+		emit_signal("potion_changed", potion_count)
+		AudioManager.play_sfx(AudioManager.sfx_potion)
+		# 녹색 치유 플래시
+		var tween = create_tween()
+		visual_root.modulate = Color(0.4, 2.0, 0.4)
+		tween.tween_property(visual_root, "modulate", Color(1, 1, 1), 0.3)
+
+func _perform_skill_2() -> void:
+	# 파천검 (카라드 전수 오의: 강력한 지진 강타 광역기)
+	current_sp -= 25
+	emit_signal("mana_changed", current_sp, max_sp)
+	AudioManager.play_sfx(AudioManager.sfx_skill)
+	
+	current_state = State.ATTACK
+	is_attack_in_progress = true
+	
+	hitbox_area.set_meta("damage", 55)
+	hitbox_area.set_meta("knockback_dir", facing_direction)
+	hitbox_area.set_meta("knockback_force", 300.0)
+	hitbox_area.set_meta("is_heavy", true)
+	hitbox_area.monitoring = true
+	
+	# 도약 후 지면 강타
+	var tween = create_tween()
+	tween.tween_property(visual_root, "position:y", -14.0, 0.15)
+	tween.tween_property(visual_root, "position:y", 0.0, 0.1)
+	
+	await tween.finished
+	# 화면 흔들림 효과 또는 번쩍임
+	visual_root.modulate = Color(2.5, 1.8, 0.5)
+	var flash_tween = create_tween()
+	flash_tween.tween_property(visual_root, "modulate", Color(1, 1, 1), 0.2)
+	
+	await get_tree().create_timer(0.2).timeout
+	hitbox_area.monitoring = false
+	is_attack_in_progress = false
+	current_state = State.IDLE
 
 func take_damage(amount: int, knockback: Vector2 = Vector2.ZERO) -> void:
 	if is_invincible or current_state == State.DASH or current_hp <= 0:
@@ -142,6 +192,8 @@ func take_damage(amount: int, knockback: Vector2 = Vector2.ZERO) -> void:
 	if knockback != Vector2.ZERO:
 		velocity = knockback
 		move_and_slide()
+	
+	AudioManager.play_sfx(AudioManager.sfx_hit, 0.75)
 	
 	# 피격 시각 효과 (붉은 깜빡임)
 	var tween = create_tween()
@@ -217,6 +269,7 @@ func _perform_attack() -> void:
 	
 	# 공격 시 살짝 전방으로 스텝
 	velocity = facing_direction * 70.0
+	AudioManager.play_sfx(AudioManager.sfx_slash, 0.9 + combo_step * 0.15)
 	
 	# 히트박스 데미지/넉백 정보 갱신 및 활성화
 	hitbox_area.set_meta("damage", damage)
@@ -261,6 +314,7 @@ func _perform_skill_1() -> void:
 	# 전방으로 빠르게 관통 돌진
 	velocity = facing_direction * 350.0
 	move_and_slide()
+	AudioManager.play_sfx(AudioManager.sfx_slash, 1.4)
 	
 	var tween = create_tween()
 	tween.tween_property(visual_root, "modulate", Color(0.4, 0.8, 1.0), 0.1)
@@ -279,4 +333,5 @@ func _on_hitbox_area_entered(area: Area2D) -> void:
 			var k_dir = hitbox_area.get_meta("knockback_dir", facing_direction)
 			var k_force = hitbox_area.get_meta("knockback_force", 120.0)
 			var is_heavy = hitbox_area.get_meta("is_heavy", false)
+			AudioManager.play_sfx(AudioManager.sfx_hit, randf_range(0.95, 1.15))
 			enemy.take_damage(dmg, k_dir * k_force, is_heavy)

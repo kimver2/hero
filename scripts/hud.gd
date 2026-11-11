@@ -6,6 +6,11 @@ extends CanvasLayer
 @onready var hp_label: Label = $MarginContainer/VBoxContainer/HPContainer/HPLabel
 @onready var sp_label: Label = $MarginContainer/VBoxContainer/SPContainer/SPLabel
 @onready var quest_tracker = $QuestTracker
+@onready var potion_label: Label = $MarginContainer/VBoxContainer/PotionContainer/PotionLabel
+
+func update_potions(count: int) -> void:
+	if potion_label:
+		potion_label.text = "%d 개" % count
 
 func update_quest(title: String, current: int, total: int) -> void:
 	if quest_tracker:

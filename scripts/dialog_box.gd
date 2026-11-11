@@ -77,6 +77,11 @@ func _show_next_indicator() -> void:
 	indicator_tween.tween_property(next_indicator, "modulate:a", 0.2, 0.4)
 	indicator_tween.tween_property(next_indicator, "modulate:a", 1.0, 0.4)
 
+const PORTRAIT_LEON = preload("res://assets/ui/portrait_leon.png")
+const PORTRAIT_ELIA = preload("res://assets/ui/portrait_elia.png")
+const PORTRAIT_KARAD = preload("res://assets/ui/portrait_karad.png")
+const PORTRAIT_GUARDIAN = preload("res://assets/ui/portrait_guardian.png")
+
 func _show_next_line() -> void:
 	if dialog_queue.is_empty():
 		visible = false
@@ -98,11 +103,28 @@ func _show_next_line() -> void:
 	if indicator_tween:
 		indicator_tween.kill()
 	
+	# 화자에 따른 초상화 텍스처 동적 매핑
 	if side == "left":
+		if "카라드" in speaker:
+			left_portrait.texture = PORTRAIT_KARAD
+		elif "엘리아" in speaker:
+			left_portrait.texture = PORTRAIT_ELIA
+		elif "수호수" in speaker:
+			left_portrait.texture = PORTRAIT_GUARDIAN
+		else:
+			left_portrait.texture = PORTRAIT_LEON
 		left_portrait.visible = true
 		left_portrait.modulate = Color(1.0, 1.0, 1.0, 1.0)
 		right_portrait.modulate = Color(0.4, 0.4, 0.4, 0.7)
 	else:
+		if "카라드" in speaker:
+			right_portrait.texture = PORTRAIT_KARAD
+		elif "레온" in speaker:
+			right_portrait.texture = PORTRAIT_LEON
+		elif "수호수" in speaker:
+			right_portrait.texture = PORTRAIT_GUARDIAN
+		else:
+			right_portrait.texture = PORTRAIT_ELIA
 		right_portrait.visible = true
 		right_portrait.modulate = Color(1.0, 1.0, 1.0, 1.0)
 		left_portrait.modulate = Color(0.4, 0.4, 0.4, 0.7)

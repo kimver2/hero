@@ -1,4 +1,4 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene load_steps=3 format=3]
 
 [ext_resource type="Script" path="res://scripts/hud.gd" id="1_hud"]
 [ext_resource type="PackedScene" path="res://scenes/ui/quest_tracker.tscn" id="2_quest"]
@@ -61,3 +61,19 @@ show_percentage = false
 layout_mode = 2
 theme_override_font_sizes/font_size = 10
 text = "50 / 50"
+
+[node name="PotionContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/PotionContainer"]
+custom_minimum_size = Vector2(25, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.4, 1, 0.5, 1)
+theme_override_font_sizes/font_size = 10
+text = "POT"
+
+[node name="PotionLabel" type="Label" parent="MarginContainer/VBoxContainer/PotionContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9, 1, 0.9, 1)
+theme_override_font_sizes/font_size = 10
+text = "3 개"
