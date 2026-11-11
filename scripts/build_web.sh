@@ -25,10 +25,13 @@ self.addEventListener("fetch", function (event) {
 EOF
 fi
 
-# index.html에 Service worker 등록 코드 주입
-if ! grep -q "coop-coep-service-worker.js" build/web/index.html; then
-    sed -i '' 's|<head>|<head><script>if("serviceWorker" in navigator){navigator.serviceWorker.register("coop-coep-service-worker.js");}</script>|g' build/web/index.html
-fi
+TIMESTAMP=$(date +%s)
 
-echo "=== Web Build Complete ==="
+# 1. 강력한 캐시 방지 메타 태그 주입
+sed -i '' "s|<head>|<head><meta http-equiv=\"Cache-Control\" content=\"no-cache, no-store, must-revalidate\"><meta http-equiv=\"Pragma\" content=\"no-cache\"><meta http-equiv=\"Expires\" content=\"0\"><script>if('serviceWorker' in navigator){navigator.serviceWorker.register('coop-coep-service-worker.js');}</script>|g" build/web/index.html
+
+# 2. index.js 호출 시 타임스탬프 캐시 버스팅 적용
+sed -i '' "s|src=\"index.js\"|src=\"index.js?v=${TIMESTAMP}\"|g" build/web/index.html
+
+echo "=== Web Build Complete with Cache Busting (${TIMESTAMP}) ==="
 ls -lh build/web/
