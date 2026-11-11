@@ -1,0 +1,64 @@
+[gd_scene load_steps=9 format=3]
+
+[ext_resource type="Script" path="res://scripts/test_field.gd" id="1_field"]
+[ext_resource type="PackedScene" path="res://scenes/characters/player.tscn" id="2_player"]
+[ext_resource type="PackedScene" path="res://scenes/characters/cultist_enemy.tscn" id="3_cultist"]
+[ext_resource type="PackedScene" path="res://scenes/ui/hud.tscn" id="4_hud"]
+[ext_resource type="PackedScene" path="res://scenes/ui/virtual_controls.tscn" id="5_controls"]
+[ext_resource type="PackedScene" path="res://scenes/ui/dialog_box.tscn" id="6_dialog"]
+[ext_resource type="Texture2D" path="res://assets/sprites/tileset_ruins.png" id="7_tiles"]
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_top"]
+normal = Vector2(0, 1)
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_bottom"]
+
+[node name="TestField" type="Node2D"]
+script = ExtResource("1_field")
+
+[node name="BackgroundFloor" type="TextureRect" parent="."]
+texture_filter = 0
+offset_left = -600.0
+offset_top = -400.0
+offset_right = 600.0
+offset_bottom = 400.0
+texture = ExtResource("7_tiles")
+stretch_mode = 1
+
+[node name="RuneAltar" type="Sprite2D" parent="."]
+texture_filter = 0
+position = Vector2(300, 0)
+scale = Vector2(2.5, 2.5)
+texture = ExtResource("7_tiles")
+region_enabled = true
+region_rect = Rect2(0, 32, 32, 32)
+
+[node name="Boundaries" type="StaticBody2D" parent="."]
+collision_mask = 0
+
+[node name="Top" type="CollisionShape2D" parent="Boundaries"]
+position = Vector2(0, -350)
+shape = SubResource("WorldBoundaryShape2D_top")
+
+[node name="Bottom" type="CollisionShape2D" parent="Boundaries"]
+position = Vector2(0, 350)
+shape = SubResource("WorldBoundaryShape2D_bottom")
+
+[node name="Player" parent="." instance=ExtResource("2_player")]
+position = Vector2(-150, 0)
+
+[node name="Camera2D" type="Camera2D" parent="Player"]
+position_smoothing_enabled = true
+position_smoothing_speed = 8.0
+
+[node name="Cultist1" parent="." groups=["cultists"] instance=ExtResource("3_cultist")]
+position = Vector2(80, -50)
+
+[node name="Cultist2" parent="." groups=["cultists"] instance=ExtResource("3_cultist")]
+position = Vector2(140, 70)
+
+[node name="HUD" parent="." instance=ExtResource("4_hud")]
+
+[node name="VirtualControls" parent="." instance=ExtResource("5_controls")]
+
+[node name="DialogBox" parent="." instance=ExtResource("6_dialog")]
