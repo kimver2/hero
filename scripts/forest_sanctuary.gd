@@ -133,4 +133,4 @@ func _on_victory_dialog_finished() -> void:
 		player.set_control_active(true)
 	if exit_portal:
 		exit_portal.set_active(true)
-	hud.update_quest("수호수 정화 완료! [생명의 문장] 획득!", 1, 1)
+	hud.update_quest("성소 포털을 통해 [황혼의 대성당]으로 진입", 1, 1)

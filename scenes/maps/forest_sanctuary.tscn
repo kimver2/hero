@@ -71,7 +71,7 @@ position = Vector2(80, 0)
 
 [node name="ExitPortal" parent="." instance=ExtResource("11_portal")]
 position = Vector2(280, 0)
-target_scene_path = "res://scenes/maps/test_field.tscn"
+target_scene_path = "res://scenes/maps/cathedral_of_twilight.tscn"
 
 [node name="HUD" parent="." instance=ExtResource("7_hud")]
 
