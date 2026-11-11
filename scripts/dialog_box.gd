@@ -91,6 +91,7 @@ const PORTRAIT_ELIA = preload("res://assets/ui/portrait_elia.png")
 const PORTRAIT_KARAD = preload("res://assets/ui/portrait_karad.png")
 const PORTRAIT_GUARDIAN = preload("res://assets/ui/portrait_guardian.png")
 const PORTRAIT_MALAKAR = preload("res://assets/ui/portrait_malakar.png")
+const PORTRAIT_CABALIS = preload("res://assets/ui/portrait_cabalis.png")
 
 func _show_next_line() -> void:
 	if dialog_queue.is_empty():
@@ -122,7 +123,9 @@ func _show_next_line() -> void:
 			left_portrait.texture = PORTRAIT_ELIA
 		elif "수호수" in speaker:
 			left_portrait.texture = PORTRAIT_GUARDIAN
-		elif "말라카르" in speaker or "대주교" in speaker or "마신" in speaker:
+		elif "카발리스" in speaker:
+			left_portrait.texture = PORTRAIT_CABALIS
+		elif "말라카르" in speaker or "대주교" in speaker:
 			left_portrait.texture = PORTRAIT_MALAKAR
 		else:
 			left_portrait.texture = PORTRAIT_LEON
@@ -136,7 +139,9 @@ func _show_next_line() -> void:
 			right_portrait.texture = PORTRAIT_LEON
 		elif "수호수" in speaker:
 			right_portrait.texture = PORTRAIT_GUARDIAN
-		elif "말라카르" in speaker or "대주교" in speaker or "마신" in speaker:
+		elif "카발리스" in speaker:
+			right_portrait.texture = PORTRAIT_CABALIS
+		elif "말라카르" in speaker or "대주교" in speaker:
 			right_portrait.texture = PORTRAIT_MALAKAR
 		else:
 			right_portrait.texture = PORTRAIT_ELIA

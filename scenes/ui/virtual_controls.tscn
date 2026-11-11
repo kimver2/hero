@@ -181,6 +181,26 @@ text = "파천
 script = ExtResource("2_button")
 action_name = "skill_2"
 
+[node name="Skill3Button" type="Button" parent="ActionButtons"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -215.0
+offset_top = -135.0
+offset_right = -160.0
+offset_bottom = -85.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_colors/font_color = Color(0.6, 0.9, 1.0, 1)
+theme_override_font_sizes/font_size = 11
+text = "성광
+(O)"
+script = ExtResource("2_button")
+action_name = "skill_3"
+
 [node name="PotionButton" type="Button" parent="ActionButtons"]
 layout_mode = 1
 anchors_preset = 3

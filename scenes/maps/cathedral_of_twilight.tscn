@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3]
+[gd_scene load_steps=13 format=3]
 
 [ext_resource type="Script" path="res://scripts/cathedral_of_twilight.gd" id="1_cathedral"]
 [ext_resource type="Texture2D" path="res://assets/sprites/tileset_cathedral.png" id="2_tiles"]
@@ -6,11 +6,12 @@
 [ext_resource type="PackedScene" path="res://scenes/characters/boss_malakar.tscn" id="4_boss"]
 [ext_resource type="PackedScene" path="res://scenes/characters/elia_npc.tscn" id="5_elia"]
 [ext_resource type="PackedScene" path="res://scenes/characters/karad_npc.tscn" id="6_karad"]
-[ext_resource type="PackedScene" path="res://scenes/ui/hud.tscn" id="7_hud"]
-[ext_resource type="PackedScene" path="res://scenes/ui/boss_hp_bar.tscn" id="8_bosshp"]
-[ext_resource type="PackedScene" path="res://scenes/ui/virtual_controls.tscn" id="9_controls"]
-[ext_resource type="PackedScene" path="res://scenes/ui/dialog_box.tscn" id="10_dialog"]
-[ext_resource type="PackedScene" path="res://scenes/ui/victory_screen.tscn" id="11_vic"]
+[ext_resource type="PackedScene" path="res://scenes/objects/portal.tscn" id="7_portal"]
+[ext_resource type="PackedScene" path="res://scenes/ui/hud.tscn" id="8_hud"]
+[ext_resource type="PackedScene" path="res://scenes/ui/boss_hp_bar.tscn" id="9_bosshp"]
+[ext_resource type="PackedScene" path="res://scenes/ui/virtual_controls.tscn" id="10_controls"]
+[ext_resource type="PackedScene" path="res://scenes/ui/dialog_box.tscn" id="11_dialog"]
+[ext_resource type="PackedScene" path="res://scenes/ui/victory_screen.tscn" id="12_vic"]
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_top"]
 normal = Vector2(0, 1)
@@ -69,12 +70,16 @@ position = Vector2(-260, 20)
 [node name="BossMalakar" parent="." instance=ExtResource("4_boss")]
 position = Vector2(75, 0)
 
-[node name="HUD" parent="." instance=ExtResource("7_hud")]
+[node name="ExitPortal" parent="." instance=ExtResource("7_portal")]
+position = Vector2(240, 0)
+target_scene_path = "res://scenes/maps/void_abyss.tscn"
 
-[node name="BossHPBar" parent="HUD" instance=ExtResource("8_bosshp")]
+[node name="HUD" parent="." instance=ExtResource("8_hud")]
 
-[node name="VirtualControls" parent="." instance=ExtResource("9_controls")]
+[node name="BossHPBar" parent="HUD" instance=ExtResource("9_bosshp")]
 
-[node name="DialogBox" parent="." instance=ExtResource("10_dialog")]
+[node name="VirtualControls" parent="." instance=ExtResource("10_controls")]
 
-[node name="VictoryScreen" parent="." instance=ExtResource("11_vic")]
+[node name="DialogBox" parent="." instance=ExtResource("11_dialog")]
+
+[node name="VictoryScreen" parent="." instance=ExtResource("12_vic")]

@@ -8,11 +8,15 @@ extends Node2D
 @onready var hud = $HUD
 @onready var boss_hp_bar = $HUD/BossHPBar
 @onready var dialog_box = $DialogBox
+@onready var exit_portal = $ExitPortal
 @onready var victory_screen = $VictoryScreen
 
 var is_intro_done: bool = false
 
 func _ready() -> void:
+	if exit_portal:
+		exit_portal.set_active(false)
+	
 	if player and hud:
 		player.health_changed.connect(hud.update_hp)
 		player.mana_changed.connect(hud.update_sp)
@@ -98,32 +102,27 @@ func _play_ending_cutscene() -> void:
 		{
 			"speaker": "대주교 말라카르",
 			"side": "right",
-			"text": "크아악...! 이럴 수가... 위대한 마신 카발리스 님이... 고작 인간 따위에게... 으아아아악-!"
+			"text": "크아악...! 이대로 끝낼 수는 없다...! 내 심장과 영혼을 바쳐... 차원의 틈새를 찢어발기리라!"
+		},
+		{
+			"speaker": "대주교 말라카르",
+			"side": "right",
+			"text": "위대한 혼돈의 마신 카발리스 님이시여... 나의 피를 마시고 강림하소서!! (대성당 제단이 무너지며 공허의 균열이 열린다!)"
 		},
 		{
 			"speaker": "엘리아",
 			"side": "left",
-			"text": "영원한 안식의 빛이여... 흩어진 봉인의 족쇄를 엮어, 암흑을 심연으로 되돌리소서...!"
+			"text": "안 돼...! 마신의 차원 균열이 대륙 전체를 삼키려 하고 있어요!"
 		},
 		{
 			"speaker": "카라드",
 			"side": "right",
-			"text": "후우... 끝났군. 20년 동안 내 가슴을 짓누르던 끔찍한 족쇄가 마침내 풀렸다."
+			"text": "놈이 기어코 최후의 발악을... 레온! 저 공허의 틈새로 뛰어들어 마신의 완전한 각성을 막아야 한다!"
 		},
 		{
 			"speaker": "레온",
 			"side": "left",
-			"text": "카라드 아저씨, 엘리아... 해냈어요. 대륙에 다시 평화가 찾아왔습니다."
-		},
-		{
-			"speaker": "카라드",
-			"side": "right",
-			"text": "고맙다 꼬마야... 아니, 레온. 네 아버지보다도 훨씬 훌륭한 진정한 기사가 되었구나."
-		},
-		{
-			"speaker": "엘리아",
-			"side": "left",
-			"text": "기사님, 그리고 카라드 님... 영원히 이 여정을 잊지 못할 거예요. 우리 함께 새로운 아침을 맞이하러 가요!"
+			"text": "가자! 우리 셋의 영혼이 하나가 되는 한, 절대 굴복하지 않는다!"
 		}
 	]
 	
@@ -131,6 +130,8 @@ func _play_ending_cutscene() -> void:
 	dialog_box.start_dialog(ending_lines)
 
 func _on_ending_dialog_finished() -> void:
-	hud.update_quest("최종 결전 승리! 대륙의 혼돈 평정 완료", 1, 1)
-	if victory_screen:
-		victory_screen.show_victory()
+	if player:
+		player.set_control_active(true)
+	if exit_portal:
+		exit_portal.set_active(true)
+	hud.update_quest("공허의 균열 포털로 돌입하여 마신 카발리스 저지", 1, 1)

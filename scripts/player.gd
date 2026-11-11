@@ -131,6 +131,8 @@ func _handle_action_inputs() -> void:
 		_perform_skill_1()
 	elif Input.is_action_just_pressed("skill_2") and current_sp >= 25:
 		_perform_skill_2()
+	elif Input.is_action_just_pressed("skill_3") and current_sp >= 35:
+		_perform_skill_3()
 	elif Input.is_action_just_pressed("use_potion"):
 		use_health_potion()
 
@@ -174,6 +176,41 @@ func _perform_skill_2() -> void:
 	
 	await get_tree().create_timer(0.2).timeout
 	hitbox_area.monitoring = false
+	is_attack_in_progress = false
+	current_state = State.IDLE
+
+func _perform_skill_3() -> void:
+	# 성광섬멸참 (엘리아의 가호와 레온의 궁극오의: 화면 전체 성스러운 섬광 베기)
+	current_sp -= 35
+	emit_signal("mana_changed", current_sp, max_sp)
+	AudioManager.play_sfx(AudioManager.sfx_skill, 1.5, 3.0)
+	
+	current_state = State.ATTACK
+	is_attack_in_progress = true
+	is_invincible = true
+	
+	hitbox_area.set_meta("damage", 90)
+	hitbox_area.set_meta("knockback_dir", facing_direction)
+	hitbox_area.set_meta("knockback_force", 380.0)
+	hitbox_area.set_meta("is_heavy", true)
+	hitbox_area.monitoring = true
+	
+	# 성스러운 금빛 섬광 연출
+	var tween = create_tween()
+	visual_root.modulate = Color(3.0, 3.0, 1.5)
+	tween.tween_property(visual_root, "scale", Vector2(1.3 * signf(visual_root.scale.x), 1.3), 0.15)
+	tween.tween_property(visual_root, "scale", Vector2(1.0 * signf(visual_root.scale.x), 1.0), 0.15)
+	
+	# 전방 빛의 칼날 돌진
+	velocity = facing_direction * 220.0
+	move_and_slide()
+	
+	await tween.finished
+	visual_root.modulate = Color(1, 1, 1)
+	
+	await get_tree().create_timer(0.25).timeout
+	hitbox_area.monitoring = false
+	is_invincible = false
 	is_attack_in_progress = false
 	current_state = State.IDLE
 
