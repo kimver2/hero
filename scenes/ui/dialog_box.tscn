@@ -8,6 +8,14 @@
 layer = 10
 script = ExtResource("1_dialog")
 
+[node name="TouchOverlay" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
 [node name="LeftPortrait" type="TextureRect" parent="."]
 texture_filter = 0
 anchors_preset = 2
@@ -18,6 +26,7 @@ offset_top = -205.0
 offset_right = 126.0
 offset_bottom = -109.0
 grow_vertical = 0
+mouse_filter = 2
 texture = ExtResource("2_leon")
 stretch_mode = 5
 
@@ -34,6 +43,7 @@ offset_right = -30.0
 offset_bottom = -109.0
 grow_horizontal = 0
 grow_vertical = 0
+mouse_filter = 2
 texture = ExtResource("3_elia")
 stretch_mode = 5
 
@@ -48,6 +58,7 @@ offset_right = -20.0
 offset_bottom = -15.0
 grow_horizontal = 2
 grow_vertical = 0
+mouse_filter = 2
 
 [node name="NameContainer" type="MarginContainer" parent="Panel"]
 layout_mode = 0
@@ -55,9 +66,11 @@ offset_left = 10.0
 offset_top = -14.0
 offset_right = 150.0
 offset_bottom = 10.0
+mouse_filter = 2
 
 [node name="NameLabel" type="Label" parent="Panel/NameContainer"]
 layout_mode = 2
+mouse_filter = 2
 theme_override_colors/font_color = Color(1, 0.85, 0.2, 1)
 theme_override_font_sizes/font_size = 13
 text = " [ 레온 ] "
@@ -73,10 +86,12 @@ offset_right = -15.0
 offset_bottom = -10.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 
 [node name="TextLabel" type="Label" parent="Panel/TextMargin"]
 layout_mode = 2
 size_flags_vertical = 0
+mouse_filter = 2
 theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
 theme_override_font_sizes/font_size = 12
 text = "아버지께서 주신 검을 차고 떠난 첫 순찰 임무... 그런데 이 변방 숲에 왜 이런 불길한 기운이 감도는 거지?"
@@ -89,12 +104,15 @@ anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -60.0
-offset_top = -22.0
-offset_right = -10.0
-offset_bottom = -6.0
+offset_left = -35.0
+offset_top = -24.0
+offset_right = -12.0
+offset_bottom = -4.0
 grow_horizontal = 0
 grow_vertical = 0
-theme_override_colors/font_color = Color(1, 0.9, 0.4, 1)
-theme_override_font_sizes/font_size = 10
-text = "▼ 터치/Z"
+mouse_filter = 2
+theme_override_colors/font_color = Color(1, 0.9, 0.3, 1)
+theme_override_font_sizes/font_size = 14
+text = "▼"
+horizontal_alignment = 1
+vertical_alignment = 1
