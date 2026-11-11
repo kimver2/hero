@@ -94,9 +94,12 @@ func _physics_process(delta: float) -> void:
 			_process_dash(delta)
 
 func _handle_movement(_delta: float) -> void:
-	var input_vector = Input.get_vector("move_left", "move_right", "move_up", "move_down")
+	# 원형 데드존의 버그를 방지하기 위해 각 축의 입력을 직접 계산
+	var raw_x = Input.get_action_strength("move_right") - Input.get_action_strength("move_left")
+	var raw_y = Input.get_action_strength("move_down") - Input.get_action_strength("move_up")
+	var input_vector = Vector2(raw_x, raw_y)
 	
-	if input_vector != Vector2.ZERO:
+	if input_vector.length() > 0.15:
 		velocity = input_vector.normalized() * move_speed
 		facing_direction = input_vector.normalized()
 		_update_facing(facing_direction)

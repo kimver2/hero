@@ -1,0 +1,43 @@
+name: Auto Deploy to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Source Code
+        uses: actions/checkout@v4
+        with:
+          lfs: true
+
+      - name: Setup Godot 4
+        uses: chickensoft-games/setup-godot@v2
+        with:
+          version: 4.3.0 # 안정적인 GitHub 액션 러너 버전
+          use-dotnet: false
+          include-templates: true
+
+      - name: Build Web Export
+        run: |
+          mkdir -p build/web
+          godot --headless --export-release "Web" build/web/index.html
+          if [ -f "scripts/build_web.sh" ]; then
+            bash scripts/build_web.sh
+          fi
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./build/web
+          publish_branch: gh-pages
