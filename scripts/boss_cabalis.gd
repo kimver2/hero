@@ -1,8 +1,11 @@
 class_name BossCabalis
 extends CharacterBody2D
 
+signal health_changed(current: int, max_val: int)
 signal boss_health_changed(current: int, max_val: int)
 signal boss_defeated
+
+const DarkProjectileScene = preload("res://scenes/effects/dark_projectile.tscn")
 
 enum State { IDLE, CAST_COMETS, CLAW_SWIPE, VOID_NOVA, TELEPORT, DEAD }
 
@@ -209,44 +212,10 @@ func _teleport() -> void:
 	state_timer = 0.4
 
 func _spawn_comet(dir: Vector2, speed: float, dmg: int) -> void:
-	var proj = Area2D.new()
-	proj.collision_layer = 0
-	proj.collision_mask = 2 # player layer
-	
-	var col = CollisionShape2D.new()
-	var shape = CircleShape2D.new()
-	shape.radius = 7.0
-	col.shape = shape
-	proj.add_child(col)
-	
-	var poly = Polygon2D.new()
-	poly.color = Color(2.5, 0.2, 1.2, 0.95)
-	poly.polygon = PackedVector2Array([
-		Vector2(-7, -7), Vector2(7, -7), Vector2(7, 7), Vector2(-7, 7)
-	])
-	proj.add_child(poly)
-	
-	proj.global_position = global_position
+	var proj = DarkProjectileScene.instantiate()
 	get_parent().add_child(proj)
-	
-	proj.body_entered.connect(func(body):
-		if body is CharacterBody2D and body.is_in_group("player"):
-			if body.has_method("take_damage"):
-				body.take_damage(dmg, dir * 180.0)
-			if is_instance_valid(proj):
-				proj.queue_free()
-	)
-	
-	var timer = 2.0
-	var t = 0.0
-	while t < timer and is_instance_valid(proj):
-		var dt = await get_tree().process_frame
-		t += dt
-		if is_instance_valid(proj):
-			proj.global_position += dir * speed * dt
-	
-	if is_instance_valid(proj):
-		proj.queue_free()
+	proj.global_position = global_position + dir * 20.0
+	proj.setup(dir, speed, dmg)
 
 func _on_claw_hitbox_entered(area: Area2D) -> void:
 	if area.is_in_group("player_hurtbox"):

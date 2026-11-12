@@ -6,8 +6,10 @@ extends Area2D
 
 var direction: Vector2 = Vector2.RIGHT
 
-func setup(dir: Vector2) -> void:
+func setup(dir: Vector2, custom_speed: float = 175.0, custom_dmg: int = 12) -> void:
 	direction = dir.normalized()
+	speed = custom_speed
+	damage = custom_dmg
 	rotation = direction.angle()
 
 func _ready() -> void:

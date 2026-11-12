@@ -29,7 +29,7 @@ func _ready() -> void:
 		karad.start_following()
 	
 	if boss and boss_hp_bar:
-		boss_hp_bar.visible = false
+		boss_hp_bar.setup("황혼의 대주교 말라카르", boss.max_hp)
 		boss.boss_health_changed.connect(boss_hp_bar.update_hp)
 		boss.boss_defeated.connect(_on_boss_defeated)
 	
@@ -83,7 +83,7 @@ func _on_encounter_dialog_finished() -> void:
 	if player:
 		player.set_control_active(true)
 	if boss_hp_bar:
-		boss_hp_bar.init_boss("황혼의 대주교 말라카르", boss.max_hp)
+		boss_hp_bar.setup("황혼의 대주교 말라카르", boss.max_hp)
 	is_intro_done = true
 	hud.update_quest("황혼의 대주교 말라카르 처단", 0, 1)
 

@@ -1,8 +1,11 @@
 class_name BossGuardian
 extends CharacterBody2D
 
+signal health_changed(current: int, max_val: int)
 signal boss_health_changed(current: int, max_val: int)
 signal boss_defeated
+
+const DarkProjectileScene = preload("res://scenes/effects/dark_projectile.tscn")
 
 enum State { IDLE, CHASE, ATTACK_SWIPE, ROAR, CHARGE, STUNNED, HURT, DEAD }
 
@@ -30,6 +33,7 @@ func _ready() -> void:
 	add_to_group("enemies")
 	add_to_group("bosses")
 	current_hp = max_hp
+	emit_signal("health_changed", current_hp, max_hp)
 	emit_signal("boss_health_changed", current_hp, max_hp)
 	
 	melee_hitbox.monitoring = false
@@ -176,45 +180,10 @@ func _fire_shockwave_burst() -> void:
 		_spawn_shockwave(dir)
 
 func _spawn_shockwave(dir: Vector2) -> void:
-	var proj = Area2D.new()
-	proj.collision_layer = 0
-	proj.collision_mask = 2 # player layer
-	
-	var col = CollisionShape2D.new()
-	var shape = CircleShape2D.new()
-	shape.radius = 7.0
-	col.shape = shape
-	proj.add_child(col)
-	
-	var poly = Polygon2D.new()
-	poly.color = Color(1.0, 0.2, 0.4, 0.9)
-	poly.polygon = PackedVector2Array([
-		Vector2(-6, -6), Vector2(6, -6), Vector2(6, 6), Vector2(-6, 6)
-	])
-	proj.add_child(poly)
-	
-	proj.global_position = global_position
+	var proj = DarkProjectileScene.instantiate()
 	get_parent().add_child(proj)
-	
-	proj.body_entered.connect(func(body):
-		if body is CharacterBody2D and body.is_in_group("player"):
-			if body.has_method("take_damage"):
-				body.take_damage(16, dir * 180.0)
-			if is_instance_valid(proj):
-				proj.queue_free()
-	)
-	
-	var speed = 150.0
-	var timer = 1.4
-	var t = 0.0
-	while t < timer and is_instance_valid(proj):
-		var dt = await get_tree().process_frame
-		t += dt
-		if is_instance_valid(proj):
-			proj.global_position += dir * speed * dt
-	
-	if is_instance_valid(proj):
-		proj.queue_free()
+	proj.global_position = global_position + dir * 20.0
+	proj.setup(dir, 150.0, 16)
 
 func _start_charge_attack(dir: Vector2) -> void:
 	current_state = State.CHARGE
@@ -251,6 +220,7 @@ func take_damage(amount: int, knockback: Vector2 = Vector2.ZERO, is_heavy: bool 
 		final_dmg = int(amount * 1.5)
 	
 	current_hp = max(0, current_hp - final_dmg)
+	emit_signal("health_changed", current_hp, max_hp)
 	emit_signal("boss_health_changed", current_hp, max_hp)
 	
 	# Floating damage number

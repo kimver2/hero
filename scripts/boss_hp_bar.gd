@@ -11,7 +11,11 @@ func setup(boss_name: String, max_val: int) -> void:
 	name_label.text = "★ " + boss_name + " ★"
 	hp_bar.max_value = max_val
 	hp_bar.value = max_val
+	modulate.a = 1.0
 	visible = true
+
+func init_boss(boss_name: String, max_val: int) -> void:
+	setup(boss_name, max_val)
 
 func update_hp(current: int, max_val: int) -> void:
 	hp_bar.max_value = max_val
